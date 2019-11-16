@@ -1,0 +1,15 @@
+.find__page {
+    padding: 0 26px;
+    height: 100%;
+    background: #eee;
+    padding-top: 110px;
+    &__tabbar {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        background-color: #fff;
+    }
+}

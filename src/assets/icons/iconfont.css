@@ -1,0 +1,33 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1573909602244'); /* IE9 */
+  src: url('iconfont.eot?t=1573909602244#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAQEAAsAAAAACFQAAAO4AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDKgqDeINEATYCJAMUCwwABCAFhG0HSxtLBxEVnCfJfiTGtojzHdq7UEX7aMwED/he9dJksJ2FcTAGB8o9yF+LAFic88BGRaiRnD159IUUh2l2+p9jpkvb82F+29olqigicaO9AY4SaEBRdUdRemB3wniL7K5ALPI4BKATSTqiUpVadqwozHECEN06d2yNNWNANeQKrAjMFUsVYhYmrNpk7RowM/h78YUCwgoaJok5tV6Hyu0o9/Hsx8tyVN6oZh4C4Xg2gF8FEkgHFIgulY52yCicjkRXkxXFAKtl02Cs8MWPl/PyKOaCaC/8RoVO/uFpSBQIM2a2OwDlSETBx7MOFQI+XqBCg48XdUhVeRmLXspRJgB0wALMBR5i4uIRnvd3ihj3wFB3t5i+RpzxwDnlXj7uldt0qVD8vlvh2ur7lT0uGgVdKx+U2KAPvX/fce+e/cEDp2G0XzDF3+50meYt3x/kcsyfetvC0QOnHg5x2M7fj9FW3avkeeFBrFxrVLW5lh61Ne7E68rFUhfe3n7w7ug7U26Nut163eum87cHjzYqnjTKLLzvCLtXnbcqZvMj+0LDOe9euv1J3T8E95itlyvRvJxWvFxxq/RvNqfps+h6vStbyojy5cXyn+2rdrP/yE2y3070J1qm7VM/f6p9FtfjuZJkt6nFF4UumjipfqPFYYsGDD0+O/lqy7b1uK0mrVo1OYS5eSHdOgbVqOBdvrzPVh9i8e4SSSuUdevYLWSuf0XRuLGoaOEbN6kI1xMkP6ZxxZxRjvrOBs76DjakHgi83DojJs9HZfb4/axcn/n287j4C6YCdcK8d14YU61jds+XgbtXrwko0Xvt2IIDGQRA3n25UqYF6K3Iz0ii1+Vgme9nD2Pa9FtPWnqV+me1XWndo/8BbYgz77oCpuSPCcHCXysEVihNbBpNSil1BEqmiSwkvCodumWGXxoHX56PowoAZ4PASkACGhYiQGIlHqmw6WDCRiEwY6Us6KRRdbUNP/ogEcoNSGU8AoE3O0HDk5Mg8eY6UmGfgYlAvoEZbyFBxyn8trSRKAj+cCQUjBrkD7zqO2Ob+RDm3tBOjaC0OCC8kJL3QZkV+dgVO6QxZqS3rZgNGOpbuKDTsGl6GKgPqDhzzEOd56bqhTLVt7MDR0LBqEH+wKu+M15tPhR+/4Z2agQ1lFU5X0jJdw5lVgCQV0UHKruW56S3rZgNGOpbuCAbNla4h6F6UEDFmesRHOqcVDNQRTa/qn3GbYCOuYVJaEIKJUzCzLadF93fLlonN4Vp+830s8GvCVvsZjM=') format('woff2'),
+  url('iconfont.woff?t=1573909602244') format('woff'),
+  url('iconfont.ttf?t=1573909602244') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1573909602244#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.icon {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-recommend:before {
+  content: "\e8c3";
+}
+
+.icon-trending:before {
+  content: "\e8c6";
+}
+
+.icon-new:before {
+  content: "\e8c7";
+}
+
+.icon-hot:before {
+  content: "\e8c9";
+}
+

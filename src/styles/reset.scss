@@ -1,0 +1,26 @@
+/* weapp */
+page {
+    height: 100%;
+}
+
+view,
+text,
+scroll-view {
+    box-sizing: border-box;
+}
+
+button {
+    &:after {
+        display: none;
+    }
+}
+
+/* h5 */
+/*postcss-pxtransform rn eject enable*/
+div {
+    box-sizing: border-box;
+}
+
+button {
+    outline: none;
+}
