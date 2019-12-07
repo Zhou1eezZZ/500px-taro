@@ -19,7 +19,8 @@ class Index extends Component {
                     baseUrl: ''
                 }
             }
-        }
+        },
+        onImgClick: () => {}
     }
 
     componentWillMount() {}
@@ -33,13 +34,15 @@ class Index extends Component {
     componentDidHide() {}
 
     render() {
-        const { data } = this.props
+        const { data, onImgClick } = this.props
         return (
             <View className='find-card'>
                 <Image
                     className='find-card__img'
+                    lazy-load
                     src={`${data.url.baseUrl}!p4`}
                     mode='widthFix'
+                    onClick={onImgClick}
                 />
                 <View className='find-card__info'>
                     {/* <Text
@@ -53,7 +56,7 @@ class Index extends Component {
                                 size='small'
                                 image={
                                     data.uploaderInfo.avatar.baseUrl
-                                        ? `${data.uploaderInfo.avatar.baseUrl}!p4`
+                                        ? `${data.uploaderInfo.avatar.baseUrl}!a1`
                                         : ''
                                 }
                             />

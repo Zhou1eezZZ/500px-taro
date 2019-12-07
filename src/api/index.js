@@ -71,21 +71,37 @@ export const getNew = ({
 
 // 获取编辑推荐图片
 export const getRecommend = ({
-  resourceType = '0,2',
-  startTime = '',
-  page = 1,
-  size = 10,
-  type = 'json'
+    resourceType = '0,2',
+    startTime = '',
+    page = 1,
+    size = 10,
+    type = 'json'
 }) => {
-  return request({
-      method: 'GET',
-      url: '/community/discover/recommendTime',
-      data: {
-          resourceType,
-          startTime,
-          page,
-          size,
-          type
-      }
-  })
+    return request({
+        method: 'GET',
+        url: '/community/discover/recommendTime',
+        data: {
+            resourceType,
+            startTime,
+            page,
+            size,
+            type
+        }
+    })
+}
+
+// 获取图片详情
+export const getPicDetail = ({
+    id,
+    type = 'json',
+    imgsize = 'p1,p2,p5,p6'
+}) => {
+    return request({
+        method: 'GET',
+        url: `/community/photo-details/${id}`,
+        data: {
+            type,
+            imgsize
+        }
+    })
 }

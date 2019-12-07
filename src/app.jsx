@@ -9,57 +9,53 @@ import './styles/reset.scss'
 import './assets/icons/iconfont.css'
 
 class App extends Component {
-
-  config = {
-    pages: [
-      'pages/find/index',
-      'pages/user/index'
-    ],
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '500px',
-      navigationBarTextStyle: 'black'
-    },
-    tabBar: {
-      color: '#333333',
-      selectedColor: '#9da8ff',
-      backgroundColor: '#ffffff',
-      borderStyle: 'white',
-      list: [
-        {
-          pagePath: 'pages/find/index',
-          iconPath: './assets/tabbarIcon/find.png',
-          selectedIconPath: './assets/tabbarIcon/find_active.png',
-          text: '发现'
+    config = {
+        pages: ['pages/find/index', 'pages/user/index', 'pages/detail/index'],
+        window: {
+            backgroundTextStyle: 'light',
+            navigationBarBackgroundColor: '#fff',
+            navigationBarTitleText: '500px',
+            navigationBarTextStyle: 'black'
         },
-        {
-          pagePath: 'pages/user/index',
-          iconPath: './assets/tabbarIcon/user.png',
-          selectedIconPath: './assets/tabbarIcon/user_active.png',
-          text: '我的'
+        tabBar: {
+            color: '#333333',
+            selectedColor: '#9da8ff',
+            backgroundColor: '#ffffff',
+            borderStyle: 'white',
+            list: [
+                {
+                    pagePath: 'pages/find/index',
+                    iconPath: './assets/tabbarIcon/find.png',
+                    selectedIconPath: './assets/tabbarIcon/find_active.png',
+                    text: '发现'
+                },
+                {
+                    pagePath: 'pages/user/index',
+                    iconPath: './assets/tabbarIcon/user.png',
+                    selectedIconPath: './assets/tabbarIcon/user_active.png',
+                    text: '我的'
+                }
+            ]
         }
-      ]
     }
-  }
 
-  componentDidMount() { }
+    componentDidMount() {}
 
-  componentDidShow() { }
+    componentDidShow() {}
 
-  componentDidHide() { }
+    componentDidHide() {}
 
-  componentDidCatchError() { }
+    componentDidCatchError() {}
 
-  // 在 App 类中的 render() 函数没有实际作用
-  // 请勿修改此函数
-  render() {
-    return (
-      <Provider store={store}>
-        <Find />
-      </Provider>
-    )
-  }
+    // 在 App 类中的 render() 函数没有实际作用
+    // 请勿修改此函数
+    render() {
+        return (
+            <Provider store={store}>
+                <Find />
+            </Provider>
+        )
+    }
 }
 
 Taro.render(<App />, document.getElementById('app'))

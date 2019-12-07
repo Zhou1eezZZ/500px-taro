@@ -38,7 +38,7 @@ class Index extends Component {
     }
 
     config = {
-        navigationBarTitleText: '发现'
+        navigationBarTitleText: '热门'
     }
 
     componentWillMount() {}
@@ -139,12 +139,20 @@ class Index extends Component {
     setActiveTab = value => {
         const { activeTab } = this.state
         if (activeTab === value) return
+        const title = tabbarList.find(item => item.value === value).label
+        Taro.setNavigationBarTitle({ title })
         this.setState(
             { activeTab: value, list: [], pageIndex: 1, isLoading: false },
             () => {
                 this.getList()
             }
         )
+    }
+
+    goToImgDetail = item => {
+        Taro.navigateTo({
+            url: `/pages/detail/index?id=${item.id}&title=${item.title}`
+        })
     }
 
     render() {
@@ -163,9 +171,15 @@ class Index extends Component {
                         onTabClick={this.setActiveTab}
                     />
                 </View>
-                {list.map(item => (
-                    <FindCard key={item.id} data={item} />
-                ))}
+                <View className='find__page__list__wrap'>
+                    {list.map(item => (
+                        <FindCard
+                            key={item.id}
+                            data={item}
+                            onImgClick={() => this.goToImgDetail(item)}
+                        />
+                    ))}
+                </View>
             </ScrollView>
         )
     }
