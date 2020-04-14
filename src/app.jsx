@@ -3,6 +3,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import store from './store'
 import Find from './pages/find/index'
+import moment from './utils/moment'
 
 import './styles/taro-ui.scss'
 import './styles/reset.scss'
@@ -10,7 +11,7 @@ import './assets/icons/iconfont.css'
 
 class App extends Component {
     config = {
-        pages: ['pages/find/index', 'pages/user/index', 'pages/detail/index'],
+        pages: ['pages/find/index', 'pages/user/index', 'pages/detail/index', 'pages/person/index'],
         window: {
             backgroundTextStyle: 'light',
             navigationBarBackgroundColor: '#fff',
@@ -39,7 +40,9 @@ class App extends Component {
         }
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        moment.locale('zh-cn')
+    }
 
     componentDidShow() {}
 

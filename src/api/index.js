@@ -9,7 +9,7 @@ export const getHot = ({
     startTime = '',
     page = 1,
     size = 10,
-    type = 'json'
+    type = 'json',
 }) => {
     return request({
         method: 'GET',
@@ -22,8 +22,8 @@ export const getHot = ({
             startTime,
             page,
             size,
-            type
-        }
+            type,
+        },
     })
 }
 
@@ -33,7 +33,7 @@ export const getTrending = ({
     startTime = '',
     page = 1,
     size = 10,
-    type = 'json'
+    type = 'json',
 }) => {
     return request({
         method: 'GET',
@@ -43,8 +43,8 @@ export const getTrending = ({
             startTime,
             page,
             size,
-            type
-        }
+            type,
+        },
     })
 }
 
@@ -54,7 +54,7 @@ export const getNew = ({
     startTime = '',
     page = 1,
     size = 10,
-    type = 'json'
+    type = 'json',
 }) => {
     return request({
         method: 'GET',
@@ -64,8 +64,8 @@ export const getNew = ({
             startTime,
             page,
             size,
-            type
-        }
+            type,
+        },
     })
 }
 
@@ -75,7 +75,7 @@ export const getRecommend = ({
     startTime = '',
     page = 1,
     size = 10,
-    type = 'json'
+    type = 'json',
 }) => {
     return request({
         method: 'GET',
@@ -85,8 +85,8 @@ export const getRecommend = ({
             startTime,
             page,
             size,
-            type
-        }
+            type,
+        },
     })
 }
 
@@ -94,14 +94,64 @@ export const getRecommend = ({
 export const getPicDetail = ({
     id,
     type = 'json',
-    imgsize = 'p1,p2,p5,p6'
+    imgsize = 'p1,p2,p5,p6',
 }) => {
     return request({
         method: 'GET',
         url: `/community/photo-details/${id}`,
         data: {
             type,
-            imgsize
-        }
+            imgsize,
+        },
+    })
+}
+
+// 获取图片的评论
+export const getPicComments = ({
+    resId,
+    type = 'json',
+    page = 1,
+    size = 10,
+}) => {
+    return request({
+        method: 'GET',
+        url: `/community/comment/list`,
+        data: {
+            resId,
+            type,
+            page,
+            size,
+        },
+    })
+}
+
+// 获取某个用户的信息
+export const getUserInfo = (queriedUserId) => {
+    return request({
+        method: 'GET',
+        url: `/community/v2/user/indexInfo?queriedUserId=${queriedUserId}`,
+    })
+}
+
+// 分页获取某个用户的作品
+export const getWorkByUserId = ({
+    queriedUserId,
+    resourceType = '0,2,4',
+    imgsize = 'p1,p2,p3',
+    page = 1,
+    size = 20,
+    type = 'json',
+}) => {
+    return request({
+        method: 'GET',
+        url: `/community/v2/user/profile`,
+        data: {
+            queriedUserId,
+            resourceType,
+            imgsize,
+            page,
+            size,
+            type,
+        },
     })
 }

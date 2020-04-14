@@ -1,0 +1,33 @@
+.comment{
+    &__item{
+        width: 100%;
+        display: flex;
+        margin-bottom: 20px;
+    }
+    &__left{
+        width: 15%;
+        display: flex;
+        justify-content: center;
+    }
+    &__right{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    &__name{
+        font-size: 28px;
+        line-height: 40px;
+        color: #525558;
+        font-weight: 700;
+    }
+    &__message{
+        font-size: 24px;
+        color: #525558;
+        font-weight: 400;
+    }
+    &__time{
+        font-size: 24px;
+        color: #b9c1c7;
+        line-height: 60px;
+    }
+}

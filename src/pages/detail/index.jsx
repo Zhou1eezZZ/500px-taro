@@ -1,13 +1,34 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtAvatar, AtIcon } from 'taro-ui'
+import { View, Text, ScrollView } from '@tarojs/components'
+import { AtAvatar } from 'taro-ui'
 import { connect } from '@tarojs/redux'
+import { getPicDetail, getPicComments } from '../../api'
+import { bindShow } from '../../utils/style'
+import DetailComment from '../../components/detail/detail-comment'
 import action from '../../utils/action'
-import { getPicDetail } from '../../api'
 import moment from '../../utils/moment'
 
 import './index.scss'
-import { bindShow } from '../../utils/style'
+
+const imgTypeObj = {
+    hot: {
+        name: '热门',
+        icon: 'https://cdn.500px.me/images/photoDetail/honor_popular.svg',
+    },
+    trending: {
+        name: '排名上升',
+        icon: 'https://cdn.500px.me/images/photoDetail/honor_upcoming.svg',
+    },
+    new: {
+        name: '新作',
+        icon: '',
+    },
+    recommend: {
+        name: '编辑推荐',
+        icon:
+            'https://cdn.500px.me/images/photoDetail/honor_editors-choice.svg',
+    },
+}
 
 @connect(({ app }) => {
     return { ...app }
@@ -17,22 +38,29 @@ class Index extends Component {
         picInfo: {
             url: {
                 baseUrl:
-                    'https://img.500px.me/5fed9c5f6437294ada1331f3506878691_1452676245638.jpg'
-            }
+                    'https://img.500px.me/5fed9c5f6437294ada1331f3506878691_1452676245638.jpg',
+            },
         },
-        isLoading: false
+        isLoading: false,
+        imgType: '', // 图片属于首页的哪个板块
+        commentsList: [],
+        commentTotal: 0,
+        isImgShow: false,
+        pageIndex: 1,
     }
 
     config = {
-        navigationBarTitleText: '详情页'
+        navigationBarTitleText: '详情页',
     }
 
     componentWillMount() {}
 
     componentDidMount() {
-        const { id, title } = this.$router.params
+        const { id, title, type } = this.$router.params
+        this.setState({ imgType: type })
         Taro.setNavigationBarTitle({ title: title ? title : '无题' })
         this.getPicDetail({ id })
+        this.getPicComments({ id })
     }
 
     componentWillUnmount() {}
@@ -51,35 +79,94 @@ class Index extends Component {
         }
     }
 
+    getPicComments = async ({ id }) => {
+        const { pageIndex, commentsList, commentTotal } = this.state
+        if (commentTotal <= commentsList.length && pageIndex !== 1) return
+        try {
+            const res = await getPicComments({ resId: id, page: pageIndex })
+            if (res.message != 'sucess') {
+                throw new Error(res.message)
+            }
+            const { comments, commentCount } = res
+            this.setState({
+                commentsList: [...commentsList, ...comments],
+                commentTotal: commentCount,
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    onImgLoad() {
+        setTimeout(() => {
+            this.setState({ isImgShow: true })
+        }, 500)
+    }
+
+    onImgError(e) {
+        console.log(e)
+    }
+
+    loadNextPage = () => {
+        const { id } = this.$router.params
+        const { pageIndex } = this.state
+        this.setState({ pageIndex: pageIndex + 1 }, () => {
+            this.getPicComments({ id })
+        })
+    }
+
+    handleAvatarClick = () => {
+        const { id } = this.state.picInfo.uploaderInfo
+        Taro.navigateTo({
+            url: `/pages/person/index?userId=${id}`,
+        })
+    }
+
     render() {
-        const { isLoading, picInfo } = this.state
+        const {
+            isLoading,
+            picInfo,
+            imgType,
+            isImgShow,
+            commentsList,
+        } = this.state
         const { exifInfo, category } = picInfo
         return isLoading ? (
             <View>loading...</View>
         ) : (
-            <View className='detail__page'>
+            <ScrollView
+                scrollY
+                enableBackToTop
+                onScrollToLower={this.loadNextPage}
+                className='detail__page'
+            >
                 <Image
+                    style={bindShow(isImgShow)}
                     className='detail__page__img'
                     src={
                         picInfo.url.p5
                             ? picInfo.url.p5
                             : `${picInfo.url.baseUrl}!p4`
                     }
+                    onLoad={this.onImgLoad}
+                    onError={() => this.onImgError}
                     mode='widthFix'
                 />
                 <View>
                     <View className='detail__page__uploader'>
-                        <AtAvatar
-                            circle
-                            size='small'
-                            image={
-                                picInfo.uploaderInfo &&
-                                picInfo.uploaderInfo.avatar &&
-                                picInfo.uploaderInfo.avatar.baseUrl
-                                    ? `${picInfo.uploaderInfo.avatar.baseUrl}!a1`
-                                    : ''
-                            }
-                        />
+                        <View onClick={this.handleAvatarClick}>
+                            <AtAvatar
+                                circle
+                                size='small'
+                                image={
+                                    picInfo.uploaderInfo &&
+                                    picInfo.uploaderInfo.avatar &&
+                                    picInfo.uploaderInfo.avatar.baseUrl
+                                        ? `${picInfo.uploaderInfo.avatar.baseUrl}!a1`
+                                        : 'https://pic.500px.me/images/default_tx.png'
+                                }
+                            />
+                        </View>
                         <View className='detail__page__uploader__info'>
                             <Text className='detail__page__uploader__info__name'>
                                 {picInfo.uploaderInfo.nickName}
@@ -131,24 +218,35 @@ class Index extends Component {
                                 {' '}
                             </View>
                         </View>
-                        <View className='detail__page__detail__hot'>
-                            <Text className='detail__page__detail__hot__title'>
-                                热门
-                            </Text>
-                            <AtIcon
-                                value='star-2'
-                                size='18'
-                                color='#525558'
-                            ></AtIcon>
-                            <Text className='detail__page__detail__time'>
-                                {moment(picInfo.riseUpDate).format(
-                                    'YYYY.MM.DD'
-                                )}
-                            </Text>
-                        </View>
+                        {imgType === 'new' ||
+                        (!imgType && !picInfo.riseUpDate) ? null : (
+                            <View className='detail__page__detail__hot'>
+                                <Text className='detail__page__detail__hot__title'>
+                                    {!imgType && picInfo.riseUpDate
+                                        ? imgTypeObj.hot.name
+                                        : imgTypeObj[imgType].name}
+                                </Text>
+                                <Image
+                                    className='detail__page__detail__hot__icon'
+                                    src={
+                                        !imgType && picInfo.riseUpDate
+                                            ? imgTypeObj.hot.icon
+                                            : imgTypeObj[imgType].icon
+                                    }
+                                ></Image>
+                                <Text className='detail__page__detail__time'>
+                                    {moment(picInfo.riseUpDate).format(
+                                        'YYYY.MM.DD'
+                                    )}
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 </View>
-                <View className='detail__page__camera'>
+                <View
+                    style={bindShow(exifInfo && exifInfo.modelVcg)}
+                    className='detail__page__camera'
+                >
                     <Text className='detail__page__camera__title'>
                         {exifInfo.modelVcg}
                     </Text>
@@ -207,18 +305,29 @@ class Index extends Component {
                             )}
                         </Text>
                     </View>
-                    <View className='detail__page__class__line'>
-                        <Text className='detail__page__class__line__title'>
-                            拍摄时间
-                        </Text>
-                        <Text className='detail__page__class__line__content'>
-                            {moment(exifInfo.dateTime).format(
-                                'YYYY.MM.DD HH:mm:ss'
-                            )}
-                        </Text>
-                    </View>
+                    {exifInfo ? (
+                        <View className='detail__page__class__line'>
+                            <Text className='detail__page__class__line__title'>
+                                拍摄时间
+                            </Text>
+                            <Text className='detail__page__class__line__content'>
+                                {moment(exifInfo.dateTime).format(
+                                    'YYYY.MM.DD HH:mm:ss'
+                                )}
+                            </Text>
+                        </View>
+                    ) : null}
                 </View>
-            </View>
+                <View
+                    style={bindShow(commentsList.length > 0)}
+                    className='detail__page__comment'
+                >
+                    <View className='detail__page__comment__title'>评 论</View>
+                    {commentsList.map((comment) => (
+                        <DetailComment key={comment.id} data={comment} />
+                    ))}
+                </View>
+            </ScrollView>
         )
     }
 }

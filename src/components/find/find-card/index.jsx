@@ -16,11 +16,15 @@ class Index extends Component {
         data: {
             uploaderInfo: {
                 avatar: {
-                    baseUrl: ''
-                }
-            }
+                    baseUrl: '',
+                },
+            },
         },
-        onImgClick: () => {}
+        onImgClick: () => {},
+    }
+
+    state = {
+        isShow: false,
     }
 
     componentWillMount() {}
@@ -33,33 +37,49 @@ class Index extends Component {
 
     componentDidHide() {}
 
+    onImgLoad() {
+        this.setState({ isShow: true })
+    }
+
+    onImgError(e) {
+        console.log(e)
+    }
+
+    handleAvatarClick = () => {
+        const { uploaderId } = this.state.data
+        Taro.navigateTo({
+            url: `/pages/person/index?userId=${uploaderId}`,
+        })
+    }
+
     render() {
         const { data, onImgClick } = this.props
+        const { isShow } = this.state
         return (
-            <View className='find-card'>
+            <View style={bindShow(isShow)} className='find-card'>
                 <Image
                     className='find-card__img'
                     lazy-load
                     src={`${data.url.baseUrl}!p4`}
                     mode='widthFix'
+                    onLoad={this.onImgLoad}
+                    onError={this.onImgError}
                     onClick={onImgClick}
                 />
                 <View className='find-card__info'>
-                    {/* <Text
-                        style={bindShow(data.title)}
-                        className='find-card__info__title'
-                    >{`"${data.title}"`}</Text> */}
                     <View className='find-card__info__detail'>
                         <View className='find-card__info__detail__left'>
-                            <AtAvatar
-                                circle
-                                size='small'
-                                image={
-                                    data.uploaderInfo.avatar.baseUrl
-                                        ? `${data.uploaderInfo.avatar.baseUrl}!a1`
-                                        : ''
-                                }
-                            />
+                            <View onClick={this.handleAvatarClick}>
+                                <AtAvatar
+                                    circle
+                                    size='small'
+                                    image={
+                                        data.uploaderInfo.avatar.baseUrl
+                                            ? `${data.uploaderInfo.avatar.baseUrl}!a1`
+                                            : ''
+                                    }
+                                />
+                            </View>
                             <Text className='find-card__info__detail__left__name'>
                                 {data.uploaderInfo.nickName}
                             </Text>

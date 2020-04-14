@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import action from '../../utils/action'
 import { getHot, getTrending, getNew, getRecommend } from '../../api'
+import { debounce } from '../../utils/tools'
 import FindCard from '../../components/find/find-card'
 import FindTabbar from '../../components/find/find-tabbar'
 
@@ -11,34 +12,40 @@ import './index.scss'
 const tabbarList = [
     {
         value: 'hot',
-        label: '热门'
+        label: '热门',
     },
     {
         value: 'trending',
-        label: '排名上升'
+        label: '排名上升',
     },
     {
         value: 'new',
-        label: '新作'
+        label: '新作',
     },
     {
         value: 'recommend',
-        label: '编辑推荐'
-    }
+        label: '编辑推荐',
+    },
 ]
 @connect(({ app }) => {
     return { ...app }
 })
 class Index extends Component {
+    constructor(props) {
+        super(props)
+        this.onViewScroll = debounce(this.onViewScroll, 300)
+    }
+
     state = {
         pageIndex: 1,
         list: [],
         isLoading: false,
-        activeTab: 'hot'
+        activeTab: 'hot',
+        topNum: 0,
     }
 
     config = {
-        navigationBarTitleText: '热门'
+        navigationBarTitleText: '热门',
     }
 
     componentWillMount() {}
@@ -136,34 +143,41 @@ class Index extends Component {
         })
     }
 
-    setActiveTab = value => {
+    setActiveTab = (value) => {
         const { activeTab } = this.state
         if (activeTab === value) return
-        const title = tabbarList.find(item => item.value === value).label
+        const title = tabbarList.find((item) => item.value === value).label
         Taro.setNavigationBarTitle({ title })
         this.setState(
-            { activeTab: value, list: [], pageIndex: 1, isLoading: false },
+            {
+                topNum: 0,
+                activeTab: value,
+                list: [],
+                pageIndex: 1,
+                isLoading: false,
+            },
             () => {
                 this.getList()
             }
         )
     }
 
-    goToImgDetail = item => {
+    goToImgDetail = (item) => {
+        const { activeTab } = this.state
         Taro.navigateTo({
-            url: `/pages/detail/index?id=${item.id}&title=${item.title}`
+            url: `/pages/detail/index?id=${item.id}&title=${item.title}&type=${activeTab}`,
         })
     }
 
+    onViewScroll = (event) => {
+        const { scrollTop } = event.detail
+        this.setState({ topNum: scrollTop })
+    }
+
     render() {
-        const { list, activeTab } = this.state
+        const { list, activeTab, topNum } = this.state
         return (
-            <ScrollView
-                scrollY
-                enableBackToTop
-                onScrollToLower={this.loadNextPage}
-                className='find__page'
-            >
+            <View style={{ height: '100%' }}>
                 <View className='find__page__tabbar'>
                     <FindTabbar
                         activeTab={activeTab}
@@ -171,16 +185,27 @@ class Index extends Component {
                         onTabClick={this.setActiveTab}
                     />
                 </View>
-                <View className='find__page__list__wrap'>
-                    {list.map(item => (
-                        <FindCard
-                            key={item.id}
-                            data={item}
-                            onImgClick={() => this.goToImgDetail(item)}
-                        />
-                    ))}
-                </View>
-            </ScrollView>
+                <ScrollView
+                    scrollY
+                    enableBackToTop
+                    onScrollToLower={this.loadNextPage}
+                    scrollTop={topNum}
+                    onScroll={this.onViewScroll}
+                    className='find__page'
+                >
+                    <View className='find__page__list__wrap'>
+                        {list.map((item) =>
+                            item ? (
+                                <FindCard
+                                    key={item.id}
+                                    data={item}
+                                    onImgClick={() => this.goToImgDetail(item)}
+                                />
+                            ) : null
+                        )}
+                    </View>
+                </ScrollView>
+            </View>
         )
     }
 }

@@ -26,6 +26,6 @@ export default ({
             return response.data
         })
         .catch(error => {
-            throw error
+            console.log(error)
         })
 }
