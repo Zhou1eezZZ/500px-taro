@@ -1,13 +1,18 @@
 {
-  "miniprogramRoot": "./dist",
-  "projectname": "500px-taro",
-  "description": "500px-taro",
-  "appid": "wx116c2d791d07bc37",
-  "setting": {
-    "urlCheck": true,
-    "es6": false,
-    "postcss": false,
-    "minified": false
-  },
-  "compileType": "miniprogram"
+	"miniprogramRoot": "client/dist/",
+	"cloudfunctionRoot": "cloud/functions/",
+	"projectname": "500px-taro",
+	"description": "500px-taro",
+	"appid": "wx116c2d791d07bc37",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false
+	},
+	"compileType": "miniprogram",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+	"condition": {}
 }

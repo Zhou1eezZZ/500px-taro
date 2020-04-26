@@ -1,0 +1,113 @@
+.user {
+    width: 100%;
+    height: 100%;
+    &__login {
+        height: 100vh;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        &__img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        &__card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            line-height: 60px;
+        }
+        &__button {
+            margin-top: 20px;
+            width: 100%;
+            background-color: rgb(8, 196, 6);
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            border-style: none;
+            color: #fff;
+        }
+    }
+    &__page {
+        width: 100%;
+        height: 100vh;
+        background-color: #eee;
+        overflow: hidden;
+        &-wrap {
+            background-image: url(https://7869-xiaozhou-puioe-1301588312.tcb.qcloud.la/bg.jpg?sign=d20e9fd5d24b37b4a34e71ca9179a261&t=1584497754);
+            background-size: cover;
+            width: 100%;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+            .logo {
+                width: 100px;
+                height: 100px;
+                border: 2px solid #fff;
+                border-radius: 50%;
+            }
+        }
+        &-wave {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            z-index: 99;
+            mix-blend-mode: screen;
+            height: 100px;
+        }
+        &-text {
+            margin-top: 20px;
+            font-weight: normal;
+        }
+        &-collect {
+            width: 100%;
+            height: 200px;
+            margin-top: 480px;
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            display: flex;
+            padding: 20px;
+            background-color: #fff;
+            &-block{
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+                &:first-child{
+                    border-right: 2px solid #eee;
+                }
+            }
+            &-num{
+                font-size: 42px;
+                margin-top: 20px;
+            }
+            &-title{
+                color: #8A98A2;
+            }
+        }
+        &-list{
+            width: 94%;
+            margin: 40px 3%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+.orange{
+    color: #E38139;
+}
+.blue{
+    color: #377FF7;
+}

@@ -1,0 +1,36 @@
+.user-card {
+    width: 100%;
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #fff;
+    &__avatar{
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        margin-top: -90px;
+        z-index: 3;
+        box-sizing: content-box;
+    }
+    &__bg {
+        width: 100%;
+    }
+    &__bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    &__name {
+        font-size: 36px;
+        line-height: 60px;
+        font-weight: 500;
+        margin-left: 10px;
+    }
+    &__num {
+        font-size: 28px;
+        color: #8a98a2;
+    }
+}
