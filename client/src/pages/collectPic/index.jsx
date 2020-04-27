@@ -27,9 +27,9 @@ class Index extends Component {
     componentDidHide() {}
 
     goToImgDetail = (item) => {
-        const { activeTab } = this.state
+        const { id, title, photoCount } = item
         Taro.navigateTo({
-            url: `/pages/detail/index?id=${item.id}&title=${item.title}&type=${activeTab}`,
+            url: `/pages/detail/index?id=${id}&title=${title}&photoCount=${photoCount}`,
         })
     }
 

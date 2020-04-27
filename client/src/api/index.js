@@ -106,6 +106,22 @@ export const getPicDetail = ({
     })
 }
 
+// 获取组图中某张的详情
+export const getGroupPicDetail = ({
+    id,
+    type = 'json',
+    imgsize = 'p1,p2,p5,p6',
+}) => {
+    return request({
+        method: 'GET',
+        url: `/community/v2/groupPhoto/detail/${id}`,
+        data: {
+            type,
+            imgsize,
+        },
+    })
+}
+
 // 获取图片的评论
 export const getPicComments = ({
     resId,

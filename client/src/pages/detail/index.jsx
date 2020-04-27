@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, ScrollView } from '@tarojs/components'
-import { AtAvatar, AtIcon } from 'taro-ui'
+import { AtAvatar, AtIcon, AtTextarea, AtButton } from 'taro-ui'
 import { connect } from '@tarojs/redux'
-import { getPicDetail, getPicComments } from '../../api'
+import { getPicDetail, getGroupPicDetail, getPicComments } from '../../api'
 import { bindShow } from '../../utils/style'
 import { debounce } from '../../utils/tools'
 import DetailComment from '../../components/detail/detail-comment'
@@ -55,6 +55,7 @@ class Index extends Component {
         commentTotal: 0,
         isImgShow: false,
         pageIndex: 1,
+        commentVal: '',
     }
 
     config = {
@@ -64,10 +65,10 @@ class Index extends Component {
     componentWillMount() {}
 
     componentDidMount() {
-        const { id, title, type } = this.$router.params
+        const { id, title, type, photoCount } = this.$router.params
         this.setState({ imgType: type })
         Taro.setNavigationBarTitle({ title: title ? title : '无题' })
-        this.getPicDetail({ id })
+        this.getPicDetail({ id, isGroup: parseInt(photoCount) ? true : false })
         this.getPicComments({ id })
     }
 
@@ -77,11 +78,16 @@ class Index extends Component {
 
     componentDidHide() {}
 
-    getPicDetail = async ({ id }) => {
+    getPicDetail = async ({ id, isGroup }) => {
         try {
             this.setState({ isLoading: true })
-            const res = await getPicDetail({ id })
-            this.setState({ picInfo: res, isLoading: false })
+            const res = isGroup
+                ? await getGroupPicDetail({ id })
+                : await getPicDetail({ id })
+            this.setState({
+                picInfo: isGroup ? res.data : res,
+                isLoading: false,
+            })
         } catch (error) {
             console.log(error)
         }
@@ -96,13 +102,27 @@ class Index extends Component {
                 throw new Error(res.message)
             }
             const { comments, commentCount } = res
+            const adapterComments = this.commentsAdapter(comments)
             this.setState({
-                commentsList: [...commentsList, ...comments],
+                commentsList: [...commentsList, ...adapterComments],
                 commentTotal: commentCount,
             })
         } catch (error) {
             console.log(error.message)
         }
+    }
+
+    commentsAdapter = (comments) => {
+        const result = comments.map((e) => ({
+            id: e.id,
+            avatarUrl: e.userInfo.avatar.baseUrl
+                ? `${e.userInfo.avatar.baseUrl}!a1`
+                : 'https://pic.500px.me/images/default_tx.png',
+            nickName: e.userInfo.nickName,
+            message: e.message,
+            createDate: e.createDate,
+        }))
+        return result
     }
 
     onImgLoad() {
@@ -135,7 +155,7 @@ class Index extends Component {
             title: '处理中',
         })
         const { dispatch } = this.props
-        const { id, title } = this.$router.params
+        const { id, title, photoCount } = this.$router.params
         const { picInfo } = this.state
         const uploader = picInfo.uploaderInfo.nickName
         const uploaderAvatar = picInfo.uploaderInfo.avatar.baseUrl
@@ -150,7 +170,7 @@ class Index extends Component {
                 name: isCollect ? 'discollectPic' : 'collectPic',
                 data: isCollect
                     ? { id }
-                    : { id, title, uploader, img, uploaderAvatar },
+                    : { id, title, uploader, img, uploaderAvatar, photoCount },
             })
             .then((res) => {
                 const userInfo = res.result
@@ -163,6 +183,45 @@ class Index extends Component {
             })
     }
 
+    handleChangeComment = (e) => {
+        this.setState({ commentVal: e.detail.value })
+    }
+
+    handleSubmitComment = () => {
+        const { commentVal } = this.state
+        const { id } = this.$router.params
+        const { dispatch } = this.props
+        if (commentVal) {
+            Taro.showLoading({
+                title: '提交中',
+            })
+            Taro.cloud
+                .callFunction({
+                    name: 'addComment',
+                    data: {
+                        id,
+                        message: commentVal,
+                        createDate: new Date().getTime(),
+                    },
+                })
+                .then((res) => {
+                    const userInfo = res.result
+                    userInfo &&
+                        dispatch(action('app/setUserInfo', { userInfo }))
+                    Taro.hideLoading()
+                })
+                .catch((error) => {
+                    console.log(error)
+                    Taro.hideLoading()
+                })
+        } else {
+            Taro.showToast({
+                title: '请输入评论',
+                icon: 'none',
+            })
+        }
+    }
+
     render() {
         const {
             isLoading,
@@ -170,12 +229,27 @@ class Index extends Component {
             imgType,
             isImgShow,
             commentsList,
+            commentVal,
         } = this.state
         const { userInfo } = this.props
         const { id } = this.$router.params
         const isCollect = userInfo.collectPhotoList
             ? userInfo.collectPhotoList.some((e) => e.id === id)
             : false
+        const isComment = userInfo.commentsList
+            ? userInfo.commentsList.some((e) => e.id === id)
+            : false
+        let userComment = {}
+        if (isComment) {
+            const comment = userInfo.commentsList.find((e) => e.id === id)
+            const { message, createDate } = comment
+            userComment = {
+                avatarUrl: userInfo.avatarUrl,
+                nickName: userInfo.nickName,
+                message,
+                createDate,
+            }
+        }
         const { exifInfo, category } = picInfo
         return isLoading ? (
             <View>loading...</View>
@@ -365,7 +439,7 @@ class Index extends Component {
                             )}
                         </Text>
                     </View>
-                    {exifInfo ? (
+                    {exifInfo && exifInfo.dateTime ? (
                         <View className='detail__page__class__line'>
                             <Text className='detail__page__class__line__title'>
                                 拍摄时间
@@ -383,6 +457,40 @@ class Index extends Component {
                     className='detail__page__comment'
                 >
                     <View className='detail__page__comment__title'>评 论</View>
+                    {userInfo.nickName ? (
+                        <View>
+                            <View
+                                style={bindShow(isComment)}
+                                className='detail__page__comment__isComment'
+                            >
+                                <Text className='detail__page__comment__isComment__title'>
+                                    你的评论：
+                                </Text>
+                                <DetailComment data={userComment} />
+                            </View>
+                            {isComment ? null : (
+                                <View className='detail__page__comment__userComment'>
+                                    <AtTextarea
+                                        value={commentVal}
+                                        onChange={(e) =>
+                                            this.handleChangeComment(e)
+                                        }
+                                        maxLength={200}
+                                        placeholder='在这里输入你的评论或见解...'
+                                    />
+                                    <View className='detail__page__comment__userComment__btn'>
+                                        <AtButton
+                                            size='small'
+                                            type='primary'
+                                            onClick={this.handleSubmitComment}
+                                        >
+                                            提交
+                                        </AtButton>
+                                    </View>
+                                </View>
+                            )}
+                        </View>
+                    ) : null}
                     {commentsList.map((comment) => (
                         <DetailComment key={comment.id} data={comment} />
                     ))}

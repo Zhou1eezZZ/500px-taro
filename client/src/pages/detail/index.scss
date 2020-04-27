@@ -135,14 +135,30 @@
         }
     }
     &__comment {
-        // background-color: #f7f8fa;
+        // background-color: #eee;
         padding: 15px 0;
+        &__isComment {
+            background-color: #eee;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            &__title {
+                margin-left: 20px;
+                font-size: 24px;
+                color: #8a98a2;
+            }
+        }
         &__title {
             // text-align: center;
             margin-left: 20px;
             font-weight: 700;
             font-size: 32px;
             line-height: 60px;
+        }
+        &__userComment {
+            padding: 20px 26px;
+            &__btn {
+                margin: 20px 0;
+            }
         }
     }
 }

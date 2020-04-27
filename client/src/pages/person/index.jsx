@@ -87,9 +87,9 @@ class Index extends Component {
     }
 
     goToImgDetail = (item) => {
-        const { activeTab } = this.state
+        const { id, title, photoCount } = item
         Taro.navigateTo({
-            url: `/pages/detail/index?id=${item.id}&title=${item.title}&type=${activeTab}`,
+            url: `/pages/detail/index?id=${id}&title=${title}&photoCount=${photoCount}`,
         })
     }
 
@@ -105,12 +105,6 @@ class Index extends Component {
 
     onImgError(e) {
         console.log(e)
-    }
-
-    goToImgDetail = (item) => {
-        Taro.navigateTo({
-            url: `/pages/detail/index?id=${item.id}&title=${item.title}`,
-        })
     }
 
     handleCollectStatusChange = (isCollect) => {
