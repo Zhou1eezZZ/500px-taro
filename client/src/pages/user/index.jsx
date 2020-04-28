@@ -77,6 +77,15 @@ class Index extends Component {
         })
     }
 
+    onShareAppMessage() {
+        return {
+            title: '快来发现精彩摄影作品',
+            path: `/pages/find/index`,
+            imageUrl:
+                'https://img.500px.me/photo/ae03b70d9495e84330b87b19d6a7c7743/e6c047e33607430bba923e1001241fdd.jpg!p5',
+        }
+    }
+
     render() {
         const { userInfo } = this.props
         const { collectPhotoList, collectPhotographerList } = userInfo

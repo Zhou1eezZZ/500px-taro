@@ -222,6 +222,19 @@ class Index extends Component {
         }
     }
 
+    onShareAppMessage() {
+        const { picInfo } = this.state
+        const { id, title, type, photoCount } = this.$router.params
+        const imageUrl = picInfo.url.p5
+            ? picInfo.url.p5
+            : `${picInfo.url.baseUrl}!p4`
+        return {
+            title: `摄影作品：${title}`,
+            path: `/pages/detail/index?id=${id}&title=${title}&type=${type}&photoCount=${photoCount}`,
+            imageUrl,
+        }
+    }
+
     render() {
         const {
             isLoading,

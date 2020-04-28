@@ -146,6 +146,20 @@ class Index extends Component {
             })
     }
 
+    onShareAppMessage() {
+        const { userInfo } = this.state
+        const { userId } = this.$router.params
+        const imageUrl =
+            userInfo.avatar && userInfo.avatar.a1
+                ? userInfo.avatar.a1
+                : 'https://pic.500px.me/images/default_tx.png'
+        return {
+            title: `摄影师：${userInfo.nickName}`,
+            path: `/pages/person/index?userId=${userId}`,
+            imageUrl,
+        }
+    }
+
     render() {
         const { isImgShow, isCollectShow, userInfo, projectList } = this.state
         const { userInfo: viewerInfo } = this.props

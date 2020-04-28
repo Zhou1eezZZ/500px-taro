@@ -175,6 +175,17 @@ class Index extends Component {
         this.setState({ topNum: scrollTop })
     }
 
+    onShareAppMessage() {
+        const { activeTab, list } = this.state
+        const title = tabbarList.find((item) => item.value === activeTab).label
+        const imageUrl = `${list[0].url.baseUrl}!p4`
+        return {
+            title: `查看今日${title}图片`,
+            path: '/pages/find/index',
+            imageUrl,
+        }
+    }
+
     render() {
         const { list, activeTab, topNum } = this.state
         return (
