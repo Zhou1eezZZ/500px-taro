@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import action from '../../utils/action'
 import PicCard from '../../components/collectPic/pic-card'
+import DefaultPage from '../../components/common/default-page'
 
 import './index.scss'
 
@@ -44,19 +45,20 @@ class Index extends Component {
 
     render() {
         const { collectPhotoList } = this.props.userInfo
-        return (
+        return collectPhotoList && collectPhotoList.length > 0 ? (
             <View className='collectPic__page'>
-                {collectPhotoList &&
-                    collectPhotoList.map((item) =>
-                        item ? (
-                            <PicCard
-                                key={item.id}
-                                data={item}
-                                onImgClick={() => this.goToImgDetail(item)}
-                            />
-                        ) : null
-                    )}
+                {collectPhotoList.map((item) =>
+                    item ? (
+                        <PicCard
+                            key={item.id}
+                            data={item}
+                            onImgClick={() => this.goToImgDetail(item)}
+                        />
+                    ) : null
+                )}
             </View>
+        ) : (
+            <DefaultPage />
         )
     }
 }

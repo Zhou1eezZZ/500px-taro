@@ -4,6 +4,7 @@ import { AtAvatar, AtIcon } from 'taro-ui'
 import { connect } from '@tarojs/redux'
 import action from '../../utils/action'
 import { getUserInfo, getWorkByUserId } from '../../api'
+import Loading from '../../components/common/loading'
 import { bindShow } from '../../utils/style'
 
 import './index.scss'
@@ -182,6 +183,7 @@ class Index extends Component {
                 onScrollToLower={this.loadNextPage}
                 className='person__page'
             >
+                {!isImgShow ? <Loading /> : null}
                 <Image
                     style={bindShow(isImgShow)}
                     className='person__page__img'

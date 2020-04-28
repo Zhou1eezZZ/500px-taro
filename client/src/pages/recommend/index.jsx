@@ -4,6 +4,7 @@ import { connect } from '@tarojs/redux'
 import action from '../../utils/action'
 import { getRecommendPhotographer } from '../../api/index'
 import UserCard from '../../components/collectUser/user-card'
+import Loading from '../../components/common/loading'
 
 import './index.scss'
 
@@ -14,6 +15,7 @@ class Index extends Component {
     state = {
         recommendList: [],
         pageIndex: 1,
+        isLoading: false,
     }
 
     config = {
@@ -35,7 +37,9 @@ class Index extends Component {
     getRecommendList = async () => {
         const { pageIndex, recommendList } = this.state
         try {
+            this.setState({ isLoading: true })
             const res = await getRecommendPhotographer({ page: pageIndex })
+            this.setState({ isLoading: false })
             const list = this.recommendAdapter(res)
             this.setState({ recommendList: [...recommendList, ...list] })
         } catch (error) {
@@ -79,7 +83,7 @@ class Index extends Component {
     }
 
     render() {
-        const { recommendList } = this.state
+        const { recommendList, isLoading, pageIndex } = this.state
         return (
             <ScrollView
                 scrollY
@@ -87,6 +91,7 @@ class Index extends Component {
                 onScrollToLower={this.loadNextPage}
                 className='recommend__page'
             >
+                {isLoading && pageIndex === 1 ? <Loading /> : null}
                 {recommendList.map((item) =>
                     item ? (
                         <UserCard

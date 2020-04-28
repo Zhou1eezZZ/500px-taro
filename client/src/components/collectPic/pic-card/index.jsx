@@ -17,6 +17,7 @@ class Index extends Component {
             title: '',
             uploader: '',
             uploaderAvatar: '',
+            uploaderId: '',
         },
         onImgClick: () => {},
     }

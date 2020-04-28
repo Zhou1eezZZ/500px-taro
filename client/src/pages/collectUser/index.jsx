@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import action from '../../utils/action'
 import UserCard from '../../components/collectUser/user-card'
+import DefaultPage from '../../components/common/default-page'
 
 import './index.scss'
 
@@ -43,19 +44,20 @@ class Index extends Component {
 
     render() {
         const { collectPhotographerList } = this.props.userInfo
-        return (
+        return collectPhotographerList && collectPhotographerList.length > 0 ? (
             <View className='collectUser__page'>
-                {collectPhotographerList &&
-                    collectPhotographerList.map((item) =>
-                        item ? (
-                            <UserCard
-                                key={item.id}
-                                data={item}
-                                onClick={() => this.goToUserDetail(item.id)}
-                            />
-                        ) : null
-                    )}
+                {collectPhotographerList.map((item) =>
+                    item ? (
+                        <UserCard
+                            key={item.id}
+                            data={item}
+                            onClick={() => this.goToUserDetail(item.id)}
+                        />
+                    ) : null
+                )}
             </View>
+        ) : (
+            <DefaultPage />
         )
     }
 }

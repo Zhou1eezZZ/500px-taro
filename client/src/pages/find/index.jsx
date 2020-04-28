@@ -6,6 +6,7 @@ import { getHot, getTrending, getNew, getRecommend } from '../../api'
 import { debounce } from '../../utils/tools'
 import FindCard from '../../components/find/find-card'
 import FindTabbar from '../../components/find/find-tabbar'
+import Loading from '../../components/common/loading'
 
 import './index.scss'
 
@@ -187,7 +188,7 @@ class Index extends Component {
     }
 
     render() {
-        const { list, activeTab, topNum } = this.state
+        const { list, activeTab, topNum, isLoading, pageIndex } = this.state
         return (
             <View style={{ height: '100%' }}>
                 <View className='find__page__tabbar'>
@@ -197,6 +198,7 @@ class Index extends Component {
                         onTabClick={this.setActiveTab}
                     />
                 </View>
+                {isLoading && pageIndex === 1 ? <Loading /> : null}
                 <ScrollView
                     scrollY
                     enableBackToTop

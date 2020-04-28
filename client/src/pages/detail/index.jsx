@@ -6,6 +6,7 @@ import { getPicDetail, getGroupPicDetail, getPicComments } from '../../api'
 import { bindShow } from '../../utils/style'
 import { debounce } from '../../utils/tools'
 import DetailComment from '../../components/detail/detail-comment'
+import Loading from '../../components/common/loading'
 import action from '../../utils/action'
 import moment from '../../utils/moment'
 
@@ -49,7 +50,6 @@ class Index extends Component {
                     'https://img.500px.me/5fed9c5f6437294ada1331f3506878691_1452676245638.jpg',
             },
         },
-        isLoading: false,
         imgType: '', // 图片属于首页的哪个板块
         commentsList: [],
         commentTotal: 0,
@@ -80,13 +80,11 @@ class Index extends Component {
 
     getPicDetail = async ({ id, isGroup }) => {
         try {
-            this.setState({ isLoading: true })
             const res = isGroup
                 ? await getGroupPicDetail({ id })
                 : await getPicDetail({ id })
             this.setState({
                 picInfo: isGroup ? res.data : res,
-                isLoading: false,
             })
         } catch (error) {
             console.log(error)
@@ -158,6 +156,7 @@ class Index extends Component {
         const { id, title, photoCount } = this.$router.params
         const { picInfo } = this.state
         const uploader = picInfo.uploaderInfo.nickName
+        const uploaderId = picInfo.uploaderInfo.id
         const uploaderAvatar = picInfo.uploaderInfo.avatar.baseUrl
             ? `${picInfo.uploaderInfo.avatar.baseUrl}!a1`
             : 'https://pic.500px.me/images/default_tx.png'
@@ -170,7 +169,15 @@ class Index extends Component {
                 name: isCollect ? 'discollectPic' : 'collectPic',
                 data: isCollect
                     ? { id }
-                    : { id, title, uploader, img, uploaderAvatar, photoCount },
+                    : {
+                          id,
+                          title,
+                          uploader,
+                          uploaderId,
+                          img,
+                          uploaderAvatar,
+                          photoCount,
+                      },
             })
             .then((res) => {
                 const userInfo = res.result
@@ -237,7 +244,6 @@ class Index extends Component {
 
     render() {
         const {
-            isLoading,
             picInfo,
             imgType,
             isImgShow,
@@ -264,15 +270,14 @@ class Index extends Component {
             }
         }
         const { exifInfo, category } = picInfo
-        return isLoading ? (
-            <View>loading...</View>
-        ) : (
+        return (
             <ScrollView
                 scrollY
                 enableBackToTop
                 onScrollToLower={this.loadNextPage}
                 className='detail__page'
             >
+                {!isImgShow ? <Loading /> : null}
                 <Image
                     style={bindShow(isImgShow)}
                     className='detail__page__img'

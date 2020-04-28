@@ -1,0 +1,17 @@
+.default{
+    width: 100vw;
+    height: 100vh;
+    background-color: #eee;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &__img{
+        width: 256px;
+        height: 256px;
+    }
+    &__text{
+        color: #707070;
+        font-size: 28px;
+    }
+}
