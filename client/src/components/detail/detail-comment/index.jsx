@@ -1,4 +1,4 @@
-import Taro, { Component } from '@tarojs/taro'
+import { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import { connect } from '@tarojs/redux'
@@ -18,16 +18,6 @@ class Index extends Component {
             createDate: 0,
         },
     }
-
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     render() {
         const { avatarUrl, nickName, message, createDate } = this.props.data

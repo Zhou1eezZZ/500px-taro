@@ -3,7 +3,6 @@ import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import { connect } from '@tarojs/redux'
 import { bindShow } from '../../../utils/style'
-import action from '../../utils/action'
 import './index.scss'
 
 @connect(({ app }) => {
@@ -25,16 +24,6 @@ class Index extends Component {
     state = {
         isShow: false,
     }
-
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     onImgLoad() {
         this.setState({ isShow: true })

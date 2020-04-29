@@ -1,9 +1,7 @@
-import Taro, { Component } from '@tarojs/taro'
+import { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtIcon } from 'taro-ui'
-import { bindShow } from '../../../utils/style'
-import action from '../../utils/action'
 import './index.scss'
 
 import logoPNG from '../../../assets/img/logo.png'
@@ -17,16 +15,6 @@ class Index extends Component {
         tabList: [],
         onTabClick: () => {}
     }
-
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     render() {
         const { activeTab, tabList, onTabClick } = this.props
