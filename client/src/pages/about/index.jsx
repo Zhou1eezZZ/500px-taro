@@ -1,7 +1,6 @@
-import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { Component } from '@tarojs/taro'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import action from '../../utils/action'
 import { bindShow } from '../../utils/style'
 import './index.scss'
 
@@ -16,12 +15,6 @@ class Index extends Component {
     state = {
         cardVisible: false,
     }
-
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
 
     componentDidShow() {
         setTimeout(() => {

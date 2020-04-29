@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import action from '../../utils/action'
 import UserCard from '../../components/collectUser/user-card'
 import DefaultPage from '../../components/common/default-page'
 
@@ -16,16 +15,6 @@ class Index extends Component {
     config = {
         navigationBarTitleText: '收藏的摄影师',
     }
-
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     goToUserDetail = (id) => {
         Taro.navigateTo({

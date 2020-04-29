@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import action from '../../utils/action'
 import { getRecommendPhotographer } from '../../api/index'
 import UserCard from '../../components/collectUser/user-card'
 import Loading from '../../components/common/loading'
@@ -22,17 +21,9 @@ class Index extends Component {
         navigationBarTitleText: '摄影师推荐',
     }
 
-    componentWillMount() {}
-
     componentDidMount() {
         this.getRecommendList()
     }
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     getRecommendList = async () => {
         const { pageIndex, recommendList } = this.state
@@ -43,7 +34,10 @@ class Index extends Component {
             const list = this.recommendAdapter(res)
             this.setState({ recommendList: [...recommendList, ...list] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: '获取推荐列表失败',
+                icon: 'none',
+            })
         }
     }
 

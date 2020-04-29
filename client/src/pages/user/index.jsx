@@ -19,12 +19,6 @@ class Index extends Component {
         cardVisible: false,
     }
 
-    componentWillMount() {}
-
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
     componentDidShow() {
         setTimeout(() => {
             this.setState({ cardVisible: true })
@@ -49,7 +43,12 @@ class Index extends Component {
                     userInfo &&
                         dispatch(action('app/setUserInfo', { userInfo }))
                 })
-                .catch(console.log)
+                .catch(()=>{
+                    Taro.showToast({
+                        title: '获取用户信息失败',
+                        icon: 'none',
+                    })
+                })
         }
     }
 

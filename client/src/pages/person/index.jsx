@@ -32,8 +32,6 @@ class Index extends Component {
         navigationBarTitleText: '作者',
     }
 
-    componentWillMount() {}
-
     componentDidMount() {
         const { userId } = this.$router.params
         this.setState({ userId }, () => {
@@ -41,12 +39,6 @@ class Index extends Component {
             this.getProject()
         })
     }
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     getUserInfo = async () => {
         try {
@@ -60,7 +52,10 @@ class Index extends Component {
                 title: res.data.nickName ? res.data.nickName : '无名',
             })
         } catch (error) {
-            console.log(error.message)
+            Taro.showToast({
+                title: error.message,
+                icon: 'none',
+            })
         }
     }
 
@@ -76,7 +71,10 @@ class Index extends Component {
             }
             this.setState({ projectList: [...projectList, ...res.data] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: error.message,
+                icon: 'none',
+            })
         }
     }
 
@@ -136,13 +134,15 @@ class Index extends Component {
                       },
             })
             .then((res) => {
-                console.log(res)
                 const userInfo = res.result
                 userInfo && dispatch(action('app/setUserInfo', { userInfo }))
                 Taro.hideLoading()
             })
             .catch((error) => {
-                console.log(error)
+                Taro.showToast({
+                    title: '收藏/取消收藏失败',
+                    icon: 'none',
+                })
                 Taro.hideLoading()
             })
     }

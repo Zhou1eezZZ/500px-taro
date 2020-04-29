@@ -65,8 +65,6 @@ class Index extends Component {
         navigationBarTitleText: '详情页',
     }
 
-    componentWillMount() {}
-
     componentDidMount() {
         const { id, title, type, photoCount } = this.$router.params
         this.setState({ imgType: type })
@@ -74,12 +72,6 @@ class Index extends Component {
         this.getPicDetail({ id, isGroup: parseInt(photoCount) ? true : false })
         this.getPicComments({ id })
     }
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     getPicDetail = async ({ id, isGroup }) => {
         try {
@@ -101,7 +93,10 @@ class Index extends Component {
                 }
             )
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: '获取图片详情失败',
+                icon: 'none',
+            })
         }
     }
 
@@ -120,7 +115,10 @@ class Index extends Component {
                 commentTotal: commentCount,
             })
         } catch (error) {
-            console.log(error.message)
+            Taro.showToast({
+                title: '获取图片评论信息失败',
+                icon: 'none',
+            })
         }
     }
 
@@ -199,7 +197,10 @@ class Index extends Component {
                 Taro.hideLoading()
             })
             .catch((error) => {
-                console.log(error)
+                Taro.showToast({
+                    title: '收藏/取消收藏失败',
+                    icon: 'none',
+                })
                 Taro.hideLoading()
             })
     }
@@ -232,7 +233,10 @@ class Index extends Component {
                     Taro.hideLoading()
                 })
                 .catch((error) => {
-                    console.log(error)
+                    Taro.showToast({
+                        title: '评论图片失败',
+                        icon: 'none',
+                    })
                     Taro.hideLoading()
                 })
         } else {
@@ -488,10 +492,7 @@ class Index extends Component {
                         </View>
                     ) : null}
                 </View>
-                <View
-                    style={bindShow(commentsList.length > 0)}
-                    className='detail__page__comment'
-                >
+                <View className='detail__page__comment'>
                     <View className='detail__page__comment__title'>评 论</View>
                     {userInfo.nickName ? (
                         <View>

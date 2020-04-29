@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import action from '../../utils/action'
 import { getHot, getTrending, getNew, getRecommend } from '../../api'
 import { debounce } from '../../utils/tools'
 import FindCard from '../../components/find/find-card'
@@ -49,17 +48,9 @@ class Index extends Component {
         navigationBarTitleText: '热门',
     }
 
-    componentWillMount() {}
-
     componentDidMount() {
         this.getList()
     }
-
-    componentWillUnmount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
 
     getList = () => {
         const { activeTab } = this.state
@@ -89,12 +80,15 @@ class Index extends Component {
             const res = await getHot({ page: pageIndex })
             this.setState({ isLoading: false })
             if (res.message !== 'success') {
-                throw new Error(res)
+                throw new Error('获取图片失败')
             }
             const { data } = res
             this.setState({ list: pageIndex === 1 ? data : [...list, ...data] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: error.message,
+                icon: 'none',
+            })
         }
     }
 
@@ -107,7 +101,10 @@ class Index extends Component {
             this.setState({ isLoading: false })
             this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: '获取图片失败',
+                icon: 'none',
+            })
         }
     }
 
@@ -120,7 +117,10 @@ class Index extends Component {
             this.setState({ isLoading: false })
             this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: '获取图片失败',
+                icon: 'none',
+            })
         }
     }
 
@@ -133,7 +133,10 @@ class Index extends Component {
             this.setState({ isLoading: false })
             this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
         } catch (error) {
-            console.log(error)
+            Taro.showToast({
+                title: '获取图片失败',
+                icon: 'none',
+            })
         }
     }
 
