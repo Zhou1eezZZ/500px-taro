@@ -10,6 +10,9 @@ import Loading from '../../components/common/loading'
 import action from '../../utils/action'
 import moment from '../../utils/moment'
 
+import WxParse from '../../components/wxParse/wxParse'
+import '../../components/wxParse/wxParse.wxss'
+
 import './index.scss'
 
 const imgTypeObj = {
@@ -83,9 +86,20 @@ class Index extends Component {
             const res = isGroup
                 ? await getGroupPicDetail({ id })
                 : await getPicDetail({ id })
-            this.setState({
-                picInfo: isGroup ? res.data : res,
-            })
+            this.setState(
+                {
+                    picInfo: isGroup ? res.data : res,
+                },
+                () => {
+                    WxParse.wxParse(
+                        'article',
+                        'html',
+                        this.state.picInfo.description,
+                        this.$scope,
+                        5
+                    )
+                }
+            )
         } catch (error) {
             console.log(error)
         }
@@ -333,7 +347,11 @@ class Index extends Component {
                             {picInfo.title}
                         </View>
                         <View className='detail__page__des__content'>
-                            {picInfo.description}
+                            <import src='../../components/wxParse/wxParse.wxml' />
+                            <template
+                                is='wxParse'
+                                data='{{wxParseData:article.nodes}}'
+                            />
                         </View>
                     </View>
                 </View>
