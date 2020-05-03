@@ -52,6 +52,7 @@ class Index extends Component {
         this.getList()
     }
 
+    // 根据当前tabbar选项来确定要获取图片列表
     getList = () => {
         const { activeTab } = this.state
         switch (activeTab) {
@@ -72,6 +73,7 @@ class Index extends Component {
         }
     }
 
+    // 获取热门图片
     getHot = async () => {
         const { pageIndex, list, isLoading } = this.state
         if (isLoading) return
@@ -92,6 +94,7 @@ class Index extends Component {
         }
     }
 
+    // 获取排名上升图片
     getTrending = async () => {
         const { pageIndex, list, isLoading } = this.state
         if (isLoading) return
@@ -108,6 +111,7 @@ class Index extends Component {
         }
     }
 
+    // 获取最新图片
     getNew = async () => {
         const { pageIndex, list, isLoading } = this.state
         if (isLoading) return
@@ -124,6 +128,7 @@ class Index extends Component {
         }
     }
 
+    // 获取推荐图片
     getRecommend = async () => {
         const { pageIndex, list, isLoading } = this.state
         if (isLoading) return
@@ -140,6 +145,7 @@ class Index extends Component {
         }
     }
 
+    // 用户滑到页面底部时触发加载下一页的请求
     loadNextPage = () => {
         const { pageIndex } = this.state
         this.setState({ pageIndex: pageIndex + 1 }, () => {
@@ -147,11 +153,15 @@ class Index extends Component {
         })
     }
 
+    // 设置当前tabbar激活项的函数
     setActiveTab = (value) => {
+        // 获取当前激活的导航栏项，如果没有变化的话就不执行下面逻辑了
         const { activeTab } = this.state
         if (activeTab === value) return
+        // 设置当前的标题为当前的激活项
         const title = tabbarList.find((item) => item.value === value).label
         Taro.setNavigationBarTitle({ title })
+        // 将当前的图片数组以及分页参数等置空，并请求接口获取新的图片数组
         this.setState(
             {
                 topNum: 0,
@@ -166,6 +176,7 @@ class Index extends Component {
         )
     }
 
+    // 卡片的点击函数，点击跳转到详情页
     goToImgDetail = (item) => {
         const { activeTab } = this.state
         const { id, title, photoCount } = item
@@ -174,11 +185,13 @@ class Index extends Component {
         })
     }
 
+    // 当scrollview被滑动时触发的函数（设置当前页面滚动的距离）
     onViewScroll = (event) => {
         const { scrollTop } = event.detail
         this.setState({ topNum: scrollTop })
     }
 
+    // 分享页面的配置（配置标题和分享卡片的图片）
     onShareAppMessage() {
         const { activeTab, list } = this.state
         const title = tabbarList.find((item) => item.value === activeTab).label
@@ -194,6 +207,7 @@ class Index extends Component {
         const { list, activeTab, topNum, isLoading, pageIndex } = this.state
         return (
             <View style={{ height: '100%' }}>
+                {/* 页面上方的导航栏 */}
                 <View className='find__page__tabbar'>
                     <FindTabbar
                         activeTab={activeTab}
@@ -201,6 +215,7 @@ class Index extends Component {
                         onTabClick={this.setActiveTab}
                     />
                 </View>
+                {/* 当首次加载时显示loading组件 */}
                 {isLoading && pageIndex === 1 ? <Loading /> : null}
                 <ScrollView
                     scrollY
@@ -211,6 +226,7 @@ class Index extends Component {
                     className='find__page'
                 >
                     <View className='find__page__list__wrap'>
+                        {/* 遍历出要展示的图像卡片 */}
                         {list.map((item) =>
                             item ? (
                                 <FindCard

@@ -16,16 +16,21 @@ class Index extends Component {
         cardVisible: false,
     }
 
+    // 页面显示时的钩子函数
     componentDidShow() {
+        // 设置卡片为可视（提供一种显示的动画）
         setTimeout(() => {
             this.setState({ cardVisible: true })
         }, 800)
     }
 
+    // 页面隐藏时的钩子函数
     componentDidHide() {
+        // 设置卡片不可视
         this.setState({ cardVisible: false })
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',

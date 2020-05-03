@@ -19,16 +19,21 @@ class Index extends Component {
         cardVisible: false,
     }
 
+    // 当页面显示时的钩子
     componentDidShow() {
+        // 设置卡片为可视（提供一个显示的动画效果）
         setTimeout(() => {
             this.setState({ cardVisible: true })
         }, 800)
     }
 
+    // 页面被隐藏时的钩子
     componentDidHide() {
+        // 设置卡片为不可视
         this.setState({ cardVisible: false })
     }
 
+    // 获取用户信息的函数
     getUserInfo = (e) => {
         const { dispatch } = this.props
         if (e.detail.cloudID) {
@@ -52,30 +57,35 @@ class Index extends Component {
         }
     }
 
+    // 跳转到展示收藏的图片的页面
     goToCollectPic = () => {
         Taro.navigateTo({
             url: `/pages/collectPic/index`,
         })
     }
 
+    // 跳转到展示收藏的摄影师的页面
     goToCollectUser = () => {
         Taro.navigateTo({
             url: `/pages/collectUser/index`,
         })
     }
 
+    // 跳转到展示推荐摄影师的页面
     goToRecommend = () => {
         Taro.navigateTo({
             url: `/pages/recommend/index`,
         })
     }
 
+    // 跳转到关于页面
     goToAbout = () => {
         Taro.navigateTo({
             url: `/pages/about/index`,
         })
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',
@@ -91,6 +101,7 @@ class Index extends Component {
         const { cardVisible } = this.state
         return (
             <View className='user'>
+                {/* 用户登陆时展示用户信息等 */}
                 {userInfo.nickName ? (
                     <View className='user__page'>
                         <View className='user__page-wrap'>
@@ -158,6 +169,7 @@ class Index extends Component {
                         </View>
                     </View>
                 ) : (
+                    // 用户未登录时展示授权登录等
                     <View className='user__login'>
                         <Image
                             className='user__login__img'

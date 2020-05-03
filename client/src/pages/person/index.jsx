@@ -32,8 +32,11 @@ class Index extends Component {
         navigationBarTitleText: '作者',
     }
 
+    // 页面挂载时的钩子函数
     componentDidMount() {
+        // 通过路由参数获取摄影师id
         const { userId } = this.$router.params
+        // 设置摄影师id后分别请求摄影师信息和摄影师作品列表
         this.setState({ userId }, () => {
             this.getUserInfo()
             this.getProject()
@@ -147,6 +150,7 @@ class Index extends Component {
             })
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         const { userInfo } = this.state
         const { userId } = this.$router.params

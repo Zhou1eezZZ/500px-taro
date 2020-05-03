@@ -16,12 +16,14 @@ class Index extends Component {
         navigationBarTitleText: '收藏的摄影师',
     }
 
+    // 跳转到用户详情页的函数
     goToUserDetail = (id) => {
         Taro.navigateTo({
             url: `/pages/person/index?userId=${id}`,
         })
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',
@@ -35,6 +37,7 @@ class Index extends Component {
         const { collectPhotographerList } = this.props.userInfo
         return collectPhotographerList && collectPhotographerList.length > 0 ? (
             <View className='collectUser__page'>
+                {/* 遍历出用户收藏的摄影师的卡片列表 */}
                 {collectPhotographerList.map((item) =>
                     item ? (
                         <UserCard

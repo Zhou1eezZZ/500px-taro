@@ -16,6 +16,7 @@ class Index extends Component {
         navigationBarTitleText: '收藏的作品',
     }
 
+    // 跳转到图片详情页的函数
     goToImgDetail = (item) => {
         const { id, title, photoCount } = item
         Taro.navigateTo({
@@ -23,6 +24,7 @@ class Index extends Component {
         })
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',
@@ -36,6 +38,7 @@ class Index extends Component {
         const { collectPhotoList } = this.props.userInfo
         return collectPhotoList && collectPhotoList.length > 0 ? (
             <View className='collectPic__page'>
+                {/* 遍历出用户收集的图片的卡片列表 */}
                 {collectPhotoList.map((item) =>
                     item ? (
                         <PicCard

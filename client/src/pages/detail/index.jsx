@@ -41,6 +41,7 @@ const imgTypeObj = {
 class Index extends Component {
     constructor(props) {
         super(props)
+        // 设置收藏函数为防抖函数
         this.handleCollectStatusChange = debounce(
             this.handleCollectStatusChange,
             1000
@@ -65,14 +66,19 @@ class Index extends Component {
         navigationBarTitleText: '详情页',
     }
 
+    // 页面挂载时的钩子
     componentDidMount() {
         const { id, title, type, photoCount } = this.$router.params
         this.setState({ imgType: type })
+        // 设置标题为图片名
         Taro.setNavigationBarTitle({ title: title ? title : '无题' })
+        // 通过接口获取图片详情
         this.getPicDetail({ id, isGroup: parseInt(photoCount) ? true : false })
+        // 通过接口获取图片的评论
         this.getPicComments({ id })
     }
 
+    // 获取图片详情的函数
     getPicDetail = async ({ id, isGroup }) => {
         try {
             const res = isGroup
@@ -100,6 +106,7 @@ class Index extends Component {
         }
     }
 
+    // 获取图片评论的函数
     getPicComments = async ({ id }) => {
         const { pageIndex, commentsList, commentTotal } = this.state
         if (commentTotal <= commentsList.length && pageIndex !== 1) return
@@ -122,6 +129,7 @@ class Index extends Component {
         }
     }
 
+    // 评论数组的数据处理函数（把通过接口获取到的评论数据处理成我们需要的样子）
     commentsAdapter = (comments) => {
         const result = comments.map((e) => ({
             id: e.id,
@@ -135,16 +143,20 @@ class Index extends Component {
         return result
     }
 
+    // 图片加载完时的钩子
     onImgLoad() {
+        // 图片加载完时让isImgshow值为true（当这个值为true会有图片显示动画，避免一开始未获取到图片时页面有空白）
         setTimeout(() => {
             this.setState({ isImgShow: true })
         }, 500)
     }
 
+    // 图片出错时的钩子
     onImgError(e) {
         console.log(e)
     }
 
+    // 当页面被滑到最底部时触发的函数（会通过接口去加载评论的下一页）
     loadNextPage = () => {
         const { id } = this.$router.params
         const { pageIndex } = this.state
@@ -153,6 +165,7 @@ class Index extends Component {
         })
     }
 
+    // 页面中摄影师头像被点击触发的函数
     handleAvatarClick = () => {
         const { id } = this.state.picInfo.uploaderInfo
         Taro.navigateTo({
@@ -160,10 +173,13 @@ class Index extends Component {
         })
     }
 
+    // 用户点击收藏图片按钮或取消收藏图片按钮的函数
     handleCollectStatusChange = (isCollect) => {
+        // 展示处理中的提示窗
         Taro.showLoading({
             title: '处理中',
         })
+        // 定义需要传递给收藏接口的一些参数，包括作者名、作者头像、图片id、图片名、图片地址
         const { dispatch } = this.props
         const { id, title, photoCount } = this.$router.params
         const { picInfo } = this.state
@@ -176,6 +192,7 @@ class Index extends Component {
             ? picInfo.url.p5
             : `${picInfo.url.baseUrl}!p4`
 
+        // 请求收藏/取消收藏的云函数
         Taro.cloud
             .callFunction({
                 name: isCollect ? 'discollectPic' : 'collectPic',
@@ -192,31 +209,40 @@ class Index extends Component {
                       },
             })
             .then((res) => {
+                // 请求成功，更新用户信息
                 const userInfo = res.result
                 userInfo && dispatch(action('app/setUserInfo', { userInfo }))
+                // 隐藏处理中的提示框
                 Taro.hideLoading()
             })
             .catch((error) => {
+                // 错误处理
                 Taro.showToast({
                     title: '收藏/取消收藏失败',
                     icon: 'none',
                 })
+                // 隐藏处理中的提示框
                 Taro.hideLoading()
             })
     }
 
+    // 用户自己评论的input组件的数据绑定函数
     handleChangeComment = (e) => {
         this.setState({ commentVal: e.detail.value })
     }
 
+    // 点击提交评论触发的函数
     handleSubmitComment = () => {
+        // 获取用户评论的内容
         const { commentVal } = this.state
         const { id } = this.$router.params
         const { dispatch } = this.props
-        if (commentVal) {
+        if (commentVal) { // 有评论内容时
+            // 弹出提交中的提示框
             Taro.showLoading({
                 title: '提交中',
             })
+            // 请求添加评论的云函数，传递的参数为评论者的id、评论时间、评论内容
             Taro.cloud
                 .callFunction({
                     name: 'addComment',
@@ -227,19 +253,24 @@ class Index extends Component {
                     },
                 })
                 .then((res) => {
+                    // 请求成功，更新用户信息
                     const userInfo = res.result
                     userInfo &&
                         dispatch(action('app/setUserInfo', { userInfo }))
+                    // 隐藏提示框
                     Taro.hideLoading()
                 })
                 .catch((error) => {
+                    // 错误处理
                     Taro.showToast({
                         title: '评论图片失败',
                         icon: 'none',
                     })
+                    // 隐藏提示框
                     Taro.hideLoading()
                 })
-        } else {
+        } else { // 评论内容为空时
+            // 提示用户
             Taro.showToast({
                 title: '请输入评论',
                 icon: 'none',
@@ -247,6 +278,7 @@ class Index extends Component {
         }
     }
 
+    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         const { picInfo } = this.state
         const { id, title, type, photoCount } = this.$router.params
@@ -331,6 +363,7 @@ class Index extends Component {
                                 粉丝数 {picInfo.uploaderInfo.userFollowedCount}
                             </Text>
                         </View>
+                        {/* 用户登陆时会显示收藏按钮这个模块 */}
                         {userInfo.nickName ? (
                             <View
                                 className='detail__page__collect'
@@ -494,6 +527,7 @@ class Index extends Component {
                 </View>
                 <View className='detail__page__comment'>
                     <View className='detail__page__comment__title'>评 论</View>
+                    {/* 用户登录时会显示自己评论的模块 */}
                     {userInfo.nickName ? (
                         <View>
                             <View
@@ -528,6 +562,7 @@ class Index extends Component {
                             )}
                         </View>
                     ) : null}
+                    {/* 遍历该作品的评论数组并展示 */}
                     {commentsList.map((comment) => (
                         <DetailComment key={comment.id} data={comment} />
                     ))}
