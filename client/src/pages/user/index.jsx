@@ -37,18 +37,20 @@ class Index extends Component {
     getUserInfo = (e) => {
         const { dispatch } = this.props
         if (e.detail.cloudID) {
+            // 请求云服务函数（授权登录）
             Taro.cloud
                 .callFunction({
                     name: 'getUserInfo',
                     data: { cloudID: e.detail.cloudID },
                 })
                 .then((res) => {
-                    console.log(res)
+                    // 请求成功，更新用户信息
                     const userInfo = res.result
                     userInfo &&
                         dispatch(action('app/setUserInfo', { userInfo }))
                 })
                 .catch(()=>{
+                    // 错误捕获，提示用户云服务函数请求失败
                     Taro.showToast({
                         title: '获取用户信息失败',
                         icon: 'none',

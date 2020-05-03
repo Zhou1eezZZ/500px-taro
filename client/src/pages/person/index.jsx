@@ -109,10 +109,13 @@ class Index extends Component {
         console.log(e)
     }
 
+    // 用户点击收藏作者按钮或者取消收藏作者按钮的函数
     handleCollectStatusChange = (isCollect) => {
+        // 展示处理中的提示窗
         Taro.showLoading({
             title: '处理中',
         })
+        // 定义需要传递给收藏接口的一些参数，包括摄影师名、摄影师头像、摄影师作品数、摄影师主页背景图
         const { dispatch } = this.props
         const { userId } = this.$router.params
         const { userInfo } = this.state
@@ -123,6 +126,7 @@ class Index extends Component {
         const workNum = userInfo.userProfilePhotoCount
         const bg = userInfo.coverUrl.p5 ? userInfo.coverUrl.p5 : ''
 
+        // 请求收藏/取消收藏的云函数
         Taro.cloud
             .callFunction({
                 name: isCollect ? 'discollectUser' : 'collectUser',
@@ -137,15 +141,19 @@ class Index extends Component {
                       },
             })
             .then((res) => {
+                // 请求成功，更新用户信息
                 const userInfo = res.result
                 userInfo && dispatch(action('app/setUserInfo', { userInfo }))
+                // 隐藏处理中的提示框
                 Taro.hideLoading()
             })
             .catch((error) => {
+                // 错误处理
                 Taro.showToast({
                     title: '收藏/取消收藏失败',
                     icon: 'none',
                 })
+                // 隐藏处理中的提示框
                 Taro.hideLoading()
             })
     }

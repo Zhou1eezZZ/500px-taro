@@ -280,15 +280,16 @@ class Index extends Component {
 
     // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
+        // 获取作品名、作品的图片路径和跳转路径需要的路由信息
         const { picInfo } = this.state
         const { id, title, type, photoCount } = this.$router.params
         const imageUrl = picInfo.url.p5
             ? picInfo.url.p5
             : `${picInfo.url.baseUrl}!p4`
         return {
-            title: `摄影作品：${title}`,
-            path: `/pages/detail/index?id=${id}&title=${title}&type=${type}&photoCount=${photoCount}`,
-            imageUrl,
+            title: `摄影作品：${title}`, // 分享卡片的标题值，这里是作品的名字
+            path: `/pages/detail/index?id=${id}&title=${title}&type=${type}&photoCount=${photoCount}`, // 分享卡片点击后进入的小程序页面路径
+            imageUrl, // 分享卡片展示的图片路径，这里是作品图片的链接
         }
     }
 
