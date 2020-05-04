@@ -78,6 +78,10 @@ class Index extends Component {
         this.getPicComments({ id })
     }
 
+    componentDidHide() {
+        this.setState({ isImgShow: false })
+    }
+
     // 获取图片详情的函数
     getPicDetail = async ({ id, isGroup }) => {
         try {
@@ -148,7 +152,7 @@ class Index extends Component {
         // 图片加载完时让isImgshow值为true（当这个值为true会有图片显示动画，避免一开始未获取到图片时页面有空白）
         setTimeout(() => {
             this.setState({ isImgShow: true })
-        }, 500)
+        }, 1000)
     }
 
     // 图片出错时的钩子
@@ -237,7 +241,8 @@ class Index extends Component {
         const { commentVal } = this.state
         const { id } = this.$router.params
         const { dispatch } = this.props
-        if (commentVal) { // 有评论内容时
+        if (commentVal) {
+            // 有评论内容时
             // 弹出提交中的提示框
             Taro.showLoading({
                 title: '提交中',
@@ -269,7 +274,8 @@ class Index extends Component {
                     // 隐藏提示框
                     Taro.hideLoading()
                 })
-        } else { // 评论内容为空时
+        } else {
+            // 评论内容为空时
             // 提示用户
             Taro.showToast({
                 title: '请输入评论',
