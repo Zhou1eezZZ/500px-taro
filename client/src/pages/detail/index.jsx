@@ -8,9 +8,9 @@ import { debounce } from '../../utils/tools'
 import DetailComment from '../../components/detail/detail-comment'
 import Loading from '../../components/common/loading'
 import action from '../../utils/action'
-import moment from '../../utils/moment'
+import moment from '../../utils/moment' // 时间处理库
 
-import WxParse from '../../components/wxParse/wxParse'
+import WxParse from '../../components/wxParse/wxParse' // html解析库
 import '../../components/wxParse/wxParse.wxss'
 
 import './index.scss'
@@ -78,6 +78,7 @@ class Index extends Component {
         this.getPicComments({ id })
     }
 
+    // 页面隐藏时的钩子
     componentDidHide() {
         this.setState({ isImgShow: false })
     }
@@ -93,6 +94,7 @@ class Index extends Component {
                     picInfo: isGroup ? res.data : res,
                 },
                 () => {
+                    // 将返回的结果中的描述属性（html字符串），解析成小程序的页面
                     WxParse.wxParse(
                         'article',
                         'html',
@@ -103,6 +105,7 @@ class Index extends Component {
                 }
             )
         } catch (error) {
+            // 错误捕获
             Taro.showToast({
                 title: '获取图片详情失败',
                 icon: 'none',
@@ -113,6 +116,7 @@ class Index extends Component {
     // 获取图片评论的函数
     getPicComments = async ({ id }) => {
         const { pageIndex, commentsList, commentTotal } = this.state
+        // 当评论已经加载完时，不再向下执行
         if (commentTotal <= commentsList.length && pageIndex !== 1) return
         try {
             const res = await getPicComments({ resId: id, page: pageIndex })
@@ -120,12 +124,14 @@ class Index extends Component {
                 throw new Error(res.message)
             }
             const { comments, commentCount } = res
+            // 通过适配器将评论数组中的评论对象处理成我们想要的数据格式
             const adapterComments = this.commentsAdapter(comments)
             this.setState({
                 commentsList: [...commentsList, ...adapterComments],
                 commentTotal: commentCount,
             })
         } catch (error) {
+            // 错误捕获
             Taro.showToast({
                 title: '获取图片评论信息失败',
                 icon: 'none',

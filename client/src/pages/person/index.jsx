@@ -43,18 +43,22 @@ class Index extends Component {
         })
     }
 
+    // 获取摄影师信息
     getUserInfo = async () => {
         try {
             const { userId } = this.state
+            // 调用接口获取摄影师信息
             const res = await getUserInfo(userId)
             if (res.message !== 'success') {
                 throw new Error('获取用户信息出错')
             }
             this.setState({ userInfo: res.data })
+            // 设置页面标题为摄影师名
             Taro.setNavigationBarTitle({
                 title: res.data.nickName ? res.data.nickName : '无名',
             })
         } catch (error) {
+            // 错误捕获
             Taro.showToast({
                 title: error.message,
                 icon: 'none',
@@ -62,9 +66,11 @@ class Index extends Component {
         }
     }
 
+    // 获取摄影师的作品列表
     getProject = async () => {
         try {
             const { pageIndex, userId, projectList } = this.state
+            // 调用接口获取摄影师作品列表
             const res = await getWorkByUserId({
                 queriedUserId: userId,
                 page: pageIndex,
@@ -74,6 +80,7 @@ class Index extends Component {
             }
             this.setState({ projectList: [...projectList, ...res.data] })
         } catch (error) {
+            // 错误捕获
             Taro.showToast({
                 title: error.message,
                 icon: 'none',
@@ -81,6 +88,7 @@ class Index extends Component {
         }
     }
 
+    // 当页面被滑到最底部时触发的函数（会通过接口去加载作品列表的下一页）
     loadNextPage = () => {
         const { pageIndex } = this.state
         this.setState({ pageIndex: pageIndex + 1 }, () => {
@@ -88,6 +96,7 @@ class Index extends Component {
         })
     }
 
+    // 点击作品卡片后执行的函数（跳转到作品详情页）
     goToImgDetail = (item) => {
         const { id, title, photoCount } = item
         Taro.navigateTo({
@@ -95,6 +104,7 @@ class Index extends Component {
         })
     }
 
+    // 图片加载完成时的钩子
     onImgLoad() {
         setTimeout(() => {
             this.setState({ isImgShow: true }, () => {
@@ -105,6 +115,7 @@ class Index extends Component {
         }, 500)
     }
 
+    // 图片出错时的钩子
     onImgError(e) {
         Taro.showToast({
             title: '图片加载出错',
@@ -170,9 +181,9 @@ class Index extends Component {
                 ? userInfo.avatar.a1
                 : 'https://pic.500px.me/images/default_tx.png'
         return {
-            title: `摄影师：${userInfo.nickName}`,
-            path: `/pages/person/index?userId=${userId}`,
-            imageUrl,
+            title: `摄影师：${userInfo.nickName}`, // 分享卡片的标题是摄影师名
+            path: `/pages/person/index?userId=${userId}`, // 点击分享卡片后跳转的路径，这里跳转到摄影师的详情页
+            imageUrl, // 分享卡片展示的图片的链接地址
         }
     }
 
