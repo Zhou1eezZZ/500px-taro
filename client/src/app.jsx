@@ -1,16 +1,17 @@
 import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
-import store from './store'
+import store from './store' // 引入全局状态管理的store
 import action from './utils/action'
 import Find from './pages/find/index'
-import moment from './utils/moment'
+import moment from './utils/moment' // 引入时间格式化库
 
-import './styles/taro-ui.scss'
-import './styles/reset.scss'
-import './assets/icons/iconfont.css'
+import './styles/taro-ui.scss' // 引入taro ui组件的样式
+import './styles/reset.scss' // 重置css样式文件
+import './assets/icons/iconfont.css' // 引入tabbar图标的字体图标样式
 
 class App extends Component {
+    // 小程序总配置项
     config = {
         pages: [
             'pages/find/index',
@@ -51,28 +52,25 @@ class App extends Component {
         cloud: true,
     }
 
+    // 组件挂载时执行的钩子
     componentDidMount() {
+        // 初始化项目的云服务
         if (process.env.TARO_ENV === 'weapp') {
             Taro.cloud.init()
         }
+        // 初始化moment库的语言为中文
         moment.locale('zh-cn')
-        // 获取用户openid 并判断用户是否已经授权登录过
+        // 调用登录函数，查看当前用户是否已经在本小程序授权，若授权直接返回用户信息实现自动登录
         this.login()
     }
 
-    componentDidShow() {}
-
-    componentDidHide() {}
-
-    componentDidCatchError() {}
-
+    // 登录函数（调用云服务函数）
     login = () => {
         Taro.cloud
             .callFunction({
                 name: 'login',
             })
             .then((res) => {
-                console.log(res)
                 const { openid, userInfo } = res.result
                 store.dispatch(action('app/setOpenId', { openId: openid }))
                 userInfo &&

@@ -27,12 +27,14 @@ const tabbarList = [
         label: '编辑推荐',
     },
 ]
+// 组件连接store，获取到store中的值
 @connect(({ app }) => {
     return { ...app }
 })
 class Index extends Component {
     constructor(props) {
         super(props)
+        // 设置onViewScroll函数为防抖函数
         this.onViewScroll = debounce(this.onViewScroll, 300)
     }
 
@@ -48,11 +50,13 @@ class Index extends Component {
         navigationBarTitleText: '热门',
     }
 
+    // 页面挂载时执行的钩子
     componentDidMount() {
+        // 获取图片列表
         this.getList()
     }
 
-    // 根据当前tabbar选项来确定要获取图片列表
+    // 根据当前tabbar选项来确定要请求的图片列表的接口
     getList = () => {
         const { activeTab } = this.state
         switch (activeTab) {
@@ -85,8 +89,9 @@ class Index extends Component {
                 throw new Error('获取图片失败')
             }
             const { data } = res
-            this.setState({ list: pageIndex === 1 ? data : [...list, ...data] })
+            this.setState({ list: [...list, ...data] })
         } catch (error) {
+            // 错误捕获，弹出提示框
             Taro.showToast({
                 title: error.message,
                 icon: 'none',
@@ -102,7 +107,7 @@ class Index extends Component {
             this.setState({ isLoading: true })
             const res = await getTrending({ page: pageIndex })
             this.setState({ isLoading: false })
-            this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
+            this.setState({ list: [...list, ...res] })
         } catch (error) {
             Taro.showToast({
                 title: '获取图片失败',
@@ -119,7 +124,7 @@ class Index extends Component {
             this.setState({ isLoading: true })
             const res = await getNew({ page: pageIndex })
             this.setState({ isLoading: false })
-            this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
+            this.setState({ list: [...list, ...res] })
         } catch (error) {
             Taro.showToast({
                 title: '获取图片失败',
@@ -136,7 +141,7 @@ class Index extends Component {
             this.setState({ isLoading: true })
             const res = await getRecommend({ page: pageIndex })
             this.setState({ isLoading: false })
-            this.setState({ list: pageIndex === 1 ? res : [...list, ...res] })
+            this.setState({ list: [...list, ...res] })
         } catch (error) {
             Taro.showToast({
                 title: '获取图片失败',
@@ -148,6 +153,7 @@ class Index extends Component {
     // 用户滑到页面底部时触发加载下一页的请求
     loadNextPage = () => {
         const { pageIndex } = this.state
+        // 设置分页参数加一后触发获取列表函数
         this.setState({ pageIndex: pageIndex + 1 }, () => {
             this.getList()
         })
