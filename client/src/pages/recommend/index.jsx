@@ -21,19 +21,24 @@ class Index extends Component {
         navigationBarTitleText: '摄影师推荐',
     }
 
+    // 页面挂载时的钩子
     componentDidMount() {
+        // 获取摄影师的推荐列表
         this.getRecommendList()
     }
 
+    // 获取摄影师推荐列表函数
     getRecommendList = async () => {
         const { pageIndex, recommendList } = this.state
         try {
             this.setState({ isLoading: true })
+            // 请求接口
             const res = await getRecommendPhotographer({ page: pageIndex })
             this.setState({ isLoading: false })
             const list = this.recommendAdapter(res)
             this.setState({ recommendList: [...recommendList, ...list] })
         } catch (error) {
+            // 错误捕获
             Taro.showToast({
                 title: '获取推荐列表失败',
                 icon: 'none',
@@ -41,6 +46,7 @@ class Index extends Component {
         }
     }
 
+    // 摄影师推荐列表的数据处理函数（把对象处理成我们需要的结构）
     recommendAdapter = (list) => {
         const result = list.map((e) => ({
             id: e.id,
@@ -54,6 +60,7 @@ class Index extends Component {
         return result
     }
 
+    // 当页面被滑到最底部时触发的函数（会通过接口去加载推荐摄影师的下一页）
     loadNextPage = () => {
         const { pageIndex } = this.state
         this.setState({ pageIndex: pageIndex + 1 }, () => {
@@ -61,12 +68,14 @@ class Index extends Component {
         })
     }
 
+    // 点击摄影师卡片时执行的函数（跳转到摄影师详情页）
     goToUserDetail = (id) => {
         Taro.navigateTo({
             url: `/pages/person/index?userId=${id}`,
         })
     }
 
+    // 配置当前页面的分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',
@@ -85,7 +94,9 @@ class Index extends Component {
                 onScrollToLower={this.loadNextPage}
                 className='recommend__page'
             >
+                {/* 页面加载时显示loading组件 */}
                 {isLoading && pageIndex === 1 ? <Loading /> : null}
+                {/* 遍历推荐的摄影师数组并展示 */}
                 {recommendList.map((item) =>
                     item ? (
                         <UserCard

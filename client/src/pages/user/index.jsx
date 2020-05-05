@@ -87,7 +87,7 @@ class Index extends Component {
         })
     }
 
-    // 配置当前页面得分享卡片（卡片标题和卡片展示的图像）
+    // 配置当前页面的分享卡片（卡片标题和卡片展示的图像）
     onShareAppMessage() {
         return {
             title: '快来发现精彩摄影作品',
