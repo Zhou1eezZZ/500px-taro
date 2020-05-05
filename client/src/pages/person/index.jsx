@@ -106,7 +106,10 @@ class Index extends Component {
     }
 
     onImgError(e) {
-        console.log(e)
+        Taro.showToast({
+            title: '图片加载出错',
+            icon: 'none',
+        })
     }
 
     // 用户点击收藏作者按钮或者取消收藏作者按钮的函数

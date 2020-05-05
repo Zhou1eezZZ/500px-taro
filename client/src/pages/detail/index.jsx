@@ -157,7 +157,10 @@ class Index extends Component {
 
     // 图片出错时的钩子
     onImgError(e) {
-        console.log(e)
+        Taro.showToast({
+            title: '图片加载出错',
+            icon: 'none',
+        })
     }
 
     // 当页面被滑到最底部时触发的函数（会通过接口去加载评论的下一页）

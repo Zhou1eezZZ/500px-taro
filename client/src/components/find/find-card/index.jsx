@@ -31,7 +31,10 @@ class Index extends Component {
     }
 
     onImgError(e) {
-        console.log(e)
+        Taro.showToast({
+            title: '图片加载出错',
+            icon: 'none',
+        })
     }
 
     handleAvatarClick = () => {
