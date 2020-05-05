@@ -25,10 +25,12 @@ class Index extends Component {
         isShow: false,
     }
 
+    // 图片加载完时的钩子
     onImgLoad() {
         this.setState({ isShow: true })
     }
 
+    // 图片加载出错的钩子
     onImgError(e) {
         Taro.showToast({
             title: '图片加载出错',
@@ -36,6 +38,7 @@ class Index extends Component {
         })
     }
 
+    // 点击摄影师头像触发的函数（跳转到摄影师的详情页）
     handleAvatarClick = () => {
         const { uploaderId } = this.state.data
         Taro.navigateTo({

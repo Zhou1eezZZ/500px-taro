@@ -24,10 +24,12 @@ class Index extends Component {
         isShow: false,
     }
 
+    // 图片加载完成时的钩子
     onImgLoad() {
         this.setState({ isShow: true })
     }
 
+    // 图片加载出错时的钩子
     onImgError(e) {
         Taro.showToast({
             title: '图片加载出错',
