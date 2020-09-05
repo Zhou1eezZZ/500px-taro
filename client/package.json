@@ -45,7 +45,7 @@
     "dva-loading": "^3.0.17",
     "nerv-devtools": "^1.5.0",
     "nervjs": "^1.5.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "taro-ui": "^2.2.4"
