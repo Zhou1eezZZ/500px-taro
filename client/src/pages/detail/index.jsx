@@ -542,9 +542,9 @@ class Index extends Component {
                     ) : null}
                 </View>
                 <View className='detail__page__comment'>
-                    <View className='detail__page__comment__title'>评 论</View>
+                    <View className='detail__page__comment__title'>点 评</View>
                     {/* 用户登录时会显示自己评论的模块 */}
-                    {userInfo.nickName ? (
+                    {/* {userInfo.nickName ? (
                         <View>
                             <View
                                 style={bindShow(isComment)}
@@ -577,7 +577,7 @@ class Index extends Component {
                                 </View>
                             )}
                         </View>
-                    ) : null}
+                    ) : null} */}
                     {/* 遍历该作品的评论数组并展示 */}
                     {commentsList.map((comment) => (
                         <DetailComment key={comment.id} data={comment} />

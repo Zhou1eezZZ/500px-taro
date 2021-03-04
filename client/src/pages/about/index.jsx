@@ -60,7 +60,7 @@ class Index extends Component {
                     <View>3. 本项目不提供任何图片的下载功能</View>
                 </View>
                 <View className='water-mark'>
-                    —— By 周雅雯 from 浙江传媒学院 ——
+                    —— By PeanuTn-T ——
                 </View>
             </View>
         )
